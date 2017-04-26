@@ -6,14 +6,18 @@ class RecTotal02
     op.to_s.match(/^[-\+]$/) != nil
   end
 
-  def rec_total(arr, total=0)
+  def rec_total(arr, total=0, first_time=true)
     if(arr.length == 0)
       return total
+
     else
       x = arr.shift
 
       if valid_num?(x)
-        total += rec_total(arr) + x.to_i
+        rec_total(arr, (total + x.to_i), false) 
+
+      elsif first_time && !valid_num?(x)
+        raise "invalid format"
 
       else
         op = x.to_sym if valid_op?(x)
@@ -21,7 +25,7 @@ class RecTotal02
         x = arr.shift
         num = x.to_i if valid_num?(x)
 
-        total += rec_total(arr).send(op, num)
+        rec_total(arr, (total.send(op, num)), false) 
       end
     end
   end

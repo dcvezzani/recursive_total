@@ -1,9 +1,10 @@
 require_relative '../spec_helper'
 
 RSpec.shared_examples "common-rec-total" do |klass|
+  subject { klass.new }
+
   let(:arr_01) { %w{123 + 34 + 56 + 24 + 67 - 112 + 25} }
   let(:arr_02) { %w{25 + 15 - -15 + 30 + -15 + 50 - 25} }
-  subject { klass.new }
 
   let(:arr_bad_01) { %w{+ 34 + 56 + 24 + 67 - 112 + 25} }
   let(:arr_bad_02) { %w{34 + 56 + 24 + 67 - 112 + 25 -} }
@@ -48,7 +49,7 @@ RSpec.shared_examples "common-rec-total" do |klass|
 end
 
 RSpec.describe RecTotal do
-  include_examples "common-rec-total", RecTotal
-  include_examples "common-rec-total", RecTotal02
+  it_behaves_like "common-rec-total", RecTotal
+  it_behaves_like "common-rec-total", RecTotal02
 end
 
