@@ -5,13 +5,27 @@ RSpec.shared_examples "common-rec-total" do |klass|
 
   let(:arr_01) { %w{123 + 34 + 56 + 24 + 67 - 112 + 25} }
   let(:arr_02) { %w{25 + 15 - -15 + 30 + -15 + 50 - 25} }
+  let(:arr_03) { %w{25 + 50 - 15 - 10 + 25 + 75 - 50 + 15} }
 
   let(:arr_bad_01) { %w{+ 34 + 56 + 24 + 67 - 112 + 25} }
   let(:arr_bad_02) { %w{34 + 56 + 24 + 67 - 112 + 25 -} }
+  let(:arr_bad_03) { %w{34 + +56 + 24 + 67 - 112 + 25 -} }
 
   context 'happy path' do
     it 'gets the right total' do
       expect(subject.rec_total(arr_01)).to eq 217
+    end
+  end
+
+  context 'happy path, subtracting a negative integer' do
+    it 'gets the right total' do
+      expect(subject.rec_total(arr_02)).to eq 95
+    end
+  end
+
+  context 'happy path, another typical example' do
+    it 'gets the right total' do
+      expect(subject.rec_total(arr_03)).to eq 115
     end
   end
 
@@ -43,6 +57,12 @@ RSpec.shared_examples "common-rec-total" do |klass|
     context 'ends with operator' do
       it 'raises exception' do
         expect{subject.rec_total(arr_bad_02)}.to raise_error StandardError
+      end
+    end
+
+    context 'specifies a positive integer with a plus sign' do
+      it 'raises exception' do
+        expect{subject.rec_total(arr_bad_03)}.to raise_error StandardError
       end
     end
   end
